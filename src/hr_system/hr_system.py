@@ -36,7 +36,7 @@ class UserSelection:
 
     def case_4(self):
         """User selected Display a reminder to schedule annual review"""
-
+        IO.print_review_reminders(IO.get_employee_db())
         pass
 
     def case_5(self):
@@ -177,6 +177,25 @@ class IO:
         date = datetime.datetime.today().replace(microsecond=0)
 
         df_filter = newdf[newdf.EndDate > date - pd.to_timedelta("30day")]
+
+        print(tabulate(df_filter, headers='keys', tablefmt='psql', showindex=False))
+
+    @staticmethod
+    def print_review_reminders(dframe):
+        """Displays a list of employees that have left the company in the past 30 days
+        :param dframe: (Pandas DataFrame) A DataFrame that contains employee information
+        :return: nothing
+        """
+
+        df = dframe[(dframe.EndDate == 'None')]
+
+        newdf=df.copy()
+
+        newdf["StartDate"] = pd.to_datetime(newdf["StartDate"])
+
+        date = datetime.datetime.today().replace(microsecond=0)
+
+        df_filter = newdf[newdf.StartDate > date - pd.to_timedelta("365day")]
 
         print(tabulate(df_filter, headers='keys', tablefmt='psql', showindex=False))
 
