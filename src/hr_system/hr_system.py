@@ -46,7 +46,8 @@ class UserSelection:
 
     def case_6(self):
         """User selected Delete record"""
-
+        fullName = IO.input_name_to_delete()
+        Processor.delete_record(IO.get_employee_db(), fullName)
         pass
 
     def case_7(self):
@@ -56,6 +57,30 @@ class UserSelection:
 
         sys.exit()
 
+class Processor:
+    """  Performs Processing tasks """
+
+    @staticmethod
+    def delete_record(dframe, name):
+        """Generates a new DataFrame Filtering Out the record corresponding to the name to delete
+        :param dframe: (Pandas DataFrame) DataFrame containing employee information
+        :param name: (String) String representing the name to delete
+        :return: nothing
+        """
+        df = dframe[(dframe.FullName != name)]
+
+        newdf = df.copy()
+
+        Processor.update_csv(newdf)
+
+    @staticmethod
+    def update_csv(dframe):
+        """Writes the filtered DataFrame to a csv file
+        :param dframe: (Pandas DataFrame) DataFrame containing employee information
+        :return: nothing
+        """
+
+        dframe.to_csv('EmployeeData.csv', index=False)
 
 class IO:
     """Performs Input and Output tasks"""
@@ -198,6 +223,27 @@ class IO:
         df_filter = newdf[newdf.StartDate > date - pd.to_timedelta("365day")]
 
         print(tabulate(df_filter, headers='keys', tablefmt='psql', showindex=False))
+
+    @staticmethod
+    def input_name_to_delete():
+        """Pause program and show a message before continuing
+        :param optional_message:  An optional message you want to display
+        :return: nothing
+        """
+
+        while True:
+            try:
+                strName = str(input('Enter Full Name: ')).strip()
+                if strName.isnumeric():
+                    raise ValueError("Name is Numeric. Enter a valid name: ")
+                elif strName == "":
+                    raise ValueError("Name is empty. Enter a valid Name: ")
+            except ValueError as e:
+                print(e)
+            else:
+                break
+
+        return strName
 
 # Main Body of Script  ------------------------------------------------------ #
 
