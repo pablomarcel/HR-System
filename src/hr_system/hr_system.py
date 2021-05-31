@@ -1,6 +1,8 @@
 import sys
-
 import pyfiglet
+import pandas as pd
+import numpy as np
+from tabulate import tabulate
 
 result = pyfiglet.figlet_format("h r  s y s t e m", font="slant")
 strStatus = ""
@@ -16,37 +18,37 @@ class UserSelection:
         return getattr(self, "case_" + str(strChoice), lambda: default)()
 
     def case_1(self):
-        """User selected Send Thank You"""
-
+        """User selected print a list of all employees"""
+        IO.print_all_employees(IO.get_employee_db())
         pass
 
     def case_2(self):
-        """User selected Create a Report"""
+        """User selected Print a list of employees currently employed"""
 
         pass
 
     def case_3(self):
-        """User selected Send Letters to all donors"""
+        """User selected Print a list of employees who have left in the past month"""
 
         pass
 
     def case_4(self):
-        """User selected Send Letters to all donors"""
+        """User selected Display a reminder to schedule annual review"""
 
         pass
 
     def case_5(self):
-        """User selected Send Letters to all donors"""
+        """User selected Capture employee information"""
 
         pass
 
     def case_6(self):
-        """User selected Send Letters to all donors"""
+        """User selected Delete record"""
 
         pass
 
     def case_7(self):
-        """User selected Quit"""
+        """User selected Exit"""
 
         print("Goodbye ")
 
@@ -67,13 +69,13 @@ class IO:
             return "1) Print a list of all employees"
 
         def two():
-            return "2) Print a list of employees who have left in the past month"
+            return "2) Print a list of employees currently employed"
 
         def three():
-            return "3) Display reminder to schedule annual review"
+            return "3) Print a list of employees who have left in the past month"
 
         def four():
-            return "4) Capture employee information"
+            return "4) Display reminder to schedule annual review"
 
         def five():
             return "5) Capture employee information"
@@ -126,6 +128,25 @@ class IO:
         print(optional_message)
         input("Press the [Enter] key to continue.")
 
+
+    @staticmethod
+    def print_all_employees(dframe):
+        """Shows the current Donors
+        :param donor_db: (Dictionary) dictionary of dictionaries containing all donors info
+        :return: nothing
+        """
+        print(tabulate(dframe, headers='keys', tablefmt='psql', showindex=False))
+
+    @staticmethod
+    def get_employee_db():
+        """Reads the csv and puts it in a pandas dataframe
+        :param: None
+        :return df: (Data Frame) a pandas dataframe
+        """
+
+        df = pd.read_csv('EmployeeData.csv')
+
+        return df
 
 # Main Body of Script  ------------------------------------------------------ #
 
