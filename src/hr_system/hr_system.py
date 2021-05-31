@@ -3,10 +3,11 @@ import pyfiglet
 import pandas as pd
 import numpy as np
 from tabulate import tabulate
+import dateutil
+import datetime
 
 result = pyfiglet.figlet_format("h r  s y s t e m", font="slant")
 strStatus = ""
-
 
 class UserSelection:
     """Handles User Selection Logic"""
@@ -24,11 +25,12 @@ class UserSelection:
 
     def case_2(self):
         """User selected Print a list of employees currently employed"""
-
+        IO.print_all_employees_employed(IO.get_employee_db())
         pass
 
     def case_3(self):
         """User selected Print a list of employees who have left in the past month"""
+        IO.print_employees_departures(IO.get_employee_db())
 
         pass
 
@@ -147,6 +149,36 @@ class IO:
         df = pd.read_csv('EmployeeData.csv')
 
         return df
+
+    @staticmethod
+    def print_all_employees_employed(dframe):
+        """Shows the current Donors
+        :param donor_db: (Dictionary) dictionary of dictionaries containing all donors info
+        :return: nothing
+        """
+
+        newdf = dframe[(dframe.EndDate == 'None')]
+
+        print(tabulate(newdf, headers='keys', tablefmt='psql', showindex=False))
+
+    @staticmethod
+    def print_employees_departures(dframe):
+        """Displays a list of employees that have left the company in the past 30 days
+        :param dframe: (Pandas DataFrame) A DataFrame that contains employee information
+        :return: nothing
+        """
+
+        df = dframe[(dframe.EndDate != 'None')]
+
+        newdf=df.copy()
+
+        newdf["EndDate"] = pd.to_datetime(newdf["EndDate"])
+
+        date = datetime.datetime.today().replace(microsecond=0)
+
+        df_filter = newdf[newdf.EndDate > date - pd.to_timedelta("30day")]
+
+        print(tabulate(df_filter, headers='keys', tablefmt='psql', showindex=False))
 
 # Main Body of Script  ------------------------------------------------------ #
 

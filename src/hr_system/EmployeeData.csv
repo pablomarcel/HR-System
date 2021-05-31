@@ -1,4 +1,6 @@
 EmployeeID,FirstName,LastName,Address,ssn,DateOfBirth,JobTitle,StartDate,EndDate
 10000001,Pablo,Marcel,Bothell,444-44-4444,01/01/1901,President,01/01/2015,None
-10000002,Beavis,Judge,Vegas,666-66-6666,01/01/1980,General,01/01/1995,01/01/2000
-10000003,BHead,Judge,Vegas,666-66-6667,01/01/1980,Judge,01/01/1995,01/01/2000
+10000002,Beavis,Judge,Vegas,666-66-6666,01/01/1980,General,01/01/1995,05/15/2021
+10000003,BHead,Judge,Vegas,666-66-6667,01/01/1980,Judge,01/01/1995,05/15/2021
+10000004,Beatrix,T,L.A.,111-11-1111,01/01/1970,Assasin,01/01/2000,None
+10000004,Butters,S,Denver,111-11-1112,01/01/1970,Professor,01/01/2000,01/01/2000
