@@ -478,7 +478,7 @@ class IO:
         """
         while True:
             try:
-                strText = str(input("Enter ssn: ")).strip()
+                strText = str(input("Enter ssn (000-00-0000): ")).strip()
                 if strText.isalpha():
                     raise ValueError("ssn is alpha. Enter a valid ssn: ")
                 elif strText == "":
@@ -498,7 +498,7 @@ class IO:
         """
         while True:
             try:
-                strText = str(input("Enter Date of Birth: ")).strip()
+                strText = str(input("Enter Date of Birth (MM/DD/YYYY): ")).strip()
                 if strText.isalpha():
                     raise ValueError(
                         "Date of Birth is alpha. Enter a valid date of birth: "
@@ -542,7 +542,7 @@ class IO:
         """
         while True:
             try:
-                strText = str(input("Enter Start Date: ")).strip()
+                strText = str(input("Enter Start Date (MM/DD/YYYY): ")).strip()
                 if strText.isalpha():
                     raise ValueError("Start Date is alpha. Enter a valid start date: ")
                 elif strText == "":
@@ -562,7 +562,7 @@ class IO:
         """
         while True:
             try:
-                strText = str(input("Enter End Date, Enter None if employed: ")).strip()
+                strText = str(input("Enter End Date (MM/DD/YYYY), Enter None if employed: ")).strip()
                 if strText.isalpha():
                     raise ValueError("End date is alpha. Enter a valid end date: ")
                 elif strText == "":
