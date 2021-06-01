@@ -2,17 +2,13 @@ import hr_system.hr_system
 import pandas as pd
 from pandas._testing import assert_frame_equal
 
-
 # next employee id testing
-
 
 def test_generate_employee_id():
     df = pd.read_csv("src\hr_system\EmployeeData.csv")
     assert hr_system.hr_system.Processor.generate_employee_id(df) == 10000009
 
-
 # testing pandas data frame in the case of a record addition
-
 
 def test_append_row():
     id = 10000009
@@ -146,7 +142,6 @@ def test_append_row():
     )
 
     assert_frame_equal(dframe, data_frame)
-
 
 # testing the pandas data frame against the csv file
 

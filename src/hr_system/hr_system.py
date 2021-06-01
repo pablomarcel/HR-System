@@ -11,7 +11,9 @@ strStatus = ""
 
 
 class UserSelection:
-    """Handles User Selection Logic"""
+    """Handles User Selection Logic
+    the class is used to implement a case-switch construct in python
+    """
 
     def switch(self, strChoice):
         """Builds a function name based off user choice and triggers the actions"""
