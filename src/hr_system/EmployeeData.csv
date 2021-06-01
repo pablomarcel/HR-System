@@ -4,3 +4,4 @@ EmployeeID,FirstName,LastName,FullName,Address,ssn,DateOfBirth,JobTitle,StartDat
 10000003,BHead,Judge,BHead Judge,Vegas,666-66-6667,01/01/1980,Judge,01/01/1995,05/15/2021
 10000004,Beatrix,T,Beatrix T,L.A.,111-11-1111,01/01/1970,Assasin,01/01/2021,None
 10000005,Butters,S,Butters S,Denver,111-11-1112,01/01/1970,Professor,01/01/2000,01/01/2000
+10000006,Jeff,Bezos,Jeff Bezos,Seattle,000-00-0000,01/01/1900,Boss,01/01/1950,01/01/2021

@@ -9,6 +9,7 @@ import datetime
 result = pyfiglet.figlet_format("h r  s y s t e m", font="slant")
 strStatus = ""
 
+
 class UserSelection:
     """Handles User Selection Logic"""
 
@@ -42,31 +43,34 @@ class UserSelection:
     def case_5(self):
         """User selected Capture employee information"""
 
-        employeeID, \
-        firstName, \
-        lastName, \
-        fullName, \
-        address,\
-        ssn,\
-        dateOfBirth,\
-        jobTitle,\
-        startDate,\
-        endDate,\
-        = IO.capture_employee_data(IO.get_employee_db())
+        (
+            employeeID,
+            firstName,
+            lastName,
+            fullName,
+            address,
+            ssn,
+            dateOfBirth,
+            jobTitle,
+            startDate,
+            endDate,
+        ) = IO.capture_employee_data(IO.get_employee_db())
 
-        Processor.append_row(
+        df = Processor.append_row(
             IO.get_employee_db(),
-            employeeID, \
-            firstName, \
-            lastName, \
-            fullName, \
-            address, \
-            ssn, \
-            dateOfBirth, \
-            jobTitle, \
-            startDate, \
-            endDate, \
-            )
+            employeeID,
+            firstName,
+            lastName,
+            fullName,
+            address,
+            ssn,
+            dateOfBirth,
+            jobTitle,
+            startDate,
+            endDate,
+        )
+
+        Processor.append_to_csv(df)
 
         pass
 
@@ -83,8 +87,9 @@ class UserSelection:
 
         sys.exit()
 
+
 class Processor:
-    """  Performs Processing tasks """
+    """Performs Processing tasks"""
 
     @staticmethod
     def delete_record(dframe, name):
@@ -106,7 +111,7 @@ class Processor:
         :return: nothing
         """
 
-        dframe.to_csv('EmployeeData.csv', index=False)
+        dframe.to_csv("EmployeeData.csv", index=False)
 
     @staticmethod
     def generate_employee_id(dframe):
@@ -114,18 +119,49 @@ class Processor:
         :param dframe: (Pandas DataFrame) DataFrame containing employee information
         :return next_id: (Integer) Next ID to be used for an employee record
         """
-        max_id = dframe['EmployeeID'].max()
+        max_id = dframe["EmployeeID"].max()
         next_id = max_id + 1
 
         return next_id
 
     @staticmethod
-    def append_row(dframe, id, first, last, full, address, ssn, dob, job, startDate, endDate):
-        """Generates unique employee id
+    def append_row(
+        df, id, first, last, full, address, ssn, dob, job, startDate, endDate
+    ):
+        """Generates a row to be appended to a pandas DataFrame
         :param dframe: (Pandas DataFrame) DataFrame containing employee information
-        :return next_id: (Integer) Next ID to be used for an employee record
+        :param id: (Integer) Next ID to be used for an employee record
+        :return: nothing
         """
-        print(id, first, last, full, address, ssn, dob, job, startDate, endDate)
+
+        new_row = {
+            "EmployeeID": id,
+            "FirstName": first,
+            "LastName": last,
+            "FullName": full,
+            "Address": address,
+            "ssn": ssn,
+            "DateOfBirth": dob,
+            "JobTitle": job,
+            "StartDate": startDate,
+            "EndDate": endDate,
+        }
+
+        # append row to the dataframe
+
+        df = df.append(new_row, ignore_index=True)
+
+        return df
+
+    @staticmethod
+    def append_to_csv(df):
+        """Writes a new DataFarme to the csv file
+        :param df: (Pandas DataFrame) DataFrame containing employee information
+        :return: nothing
+        """
+
+        df.to_csv("EmployeeData.csv", index=False)
+
 
 class IO:
     """Performs Input and Output tasks"""
@@ -200,14 +236,13 @@ class IO:
         print(optional_message)
         input("Press the [Enter] key to continue.")
 
-
     @staticmethod
     def print_all_employees(dframe):
         """Shows the current Donors
         :param donor_db: (Dictionary) dictionary of dictionaries containing all donors info
         :return: nothing
         """
-        print(tabulate(dframe, headers='keys', tablefmt='psql', showindex=False))
+        print(tabulate(dframe, headers="keys", tablefmt="psql", showindex=False))
 
     @staticmethod
     def get_employee_db():
@@ -216,7 +251,7 @@ class IO:
         :return df: (Data Frame) a pandas dataframe
         """
 
-        df = pd.read_csv('EmployeeData.csv')
+        df = pd.read_csv("EmployeeData.csv")
 
         return df
 
@@ -227,9 +262,9 @@ class IO:
         :return: nothing
         """
 
-        newdf = dframe[(dframe.EndDate == 'None')]
+        newdf = dframe[(dframe.EndDate == "None")]
 
-        print(tabulate(newdf, headers='keys', tablefmt='psql', showindex=False))
+        print(tabulate(newdf, headers="keys", tablefmt="psql", showindex=False))
 
     @staticmethod
     def print_employees_departures(dframe):
@@ -238,9 +273,9 @@ class IO:
         :return: nothing
         """
 
-        df = dframe[(dframe.EndDate != 'None')]
+        df = dframe[(dframe.EndDate != "None")]
 
-        newdf=df.copy()
+        newdf = df.copy()
 
         newdf["EndDate"] = pd.to_datetime(newdf["EndDate"])
 
@@ -248,7 +283,7 @@ class IO:
 
         df_filter = newdf[newdf.EndDate > date - pd.to_timedelta("30day")]
 
-        print(tabulate(df_filter, headers='keys', tablefmt='psql', showindex=False))
+        print(tabulate(df_filter, headers="keys", tablefmt="psql", showindex=False))
 
     @staticmethod
     def print_review_reminders(dframe):
@@ -257,9 +292,9 @@ class IO:
         :return: nothing
         """
 
-        df = dframe[(dframe.EndDate == 'None')]
+        df = dframe[(dframe.EndDate == "None")]
 
-        newdf=df.copy()
+        newdf = df.copy()
 
         newdf["StartDate"] = pd.to_datetime(newdf["StartDate"])
 
@@ -267,7 +302,7 @@ class IO:
 
         df_filter = newdf[newdf.StartDate > date - pd.to_timedelta("365day")]
 
-        print(tabulate(df_filter, headers='keys', tablefmt='psql', showindex=False))
+        print(tabulate(df_filter, headers="keys", tablefmt="psql", showindex=False))
 
     @staticmethod
     def input_name_to_delete():
@@ -278,7 +313,7 @@ class IO:
 
         while True:
             try:
-                strName = str(input('Enter Full Name: ')).strip()
+                strName = str(input("Enter Full Name: ")).strip()
                 if strName.isnumeric():
                     raise ValueError("Name is Numeric. Enter a valid name: ")
                 elif strName == "":
@@ -299,7 +334,7 @@ class IO:
         employeeID = Processor.generate_employee_id(dframe)
         firstName = IO.capture_first_name()
         lastName = IO.capture_last_name()
-        fullName = firstName + ' ' + lastName
+        fullName = firstName + " " + lastName
         address = IO.capture_address()
         ssn = IO.capture_ssn()
         dateOfBirth = IO.capture_date_of_birth()
@@ -307,7 +342,18 @@ class IO:
         startDate = IO.capture_start_date()
         endDate = IO.capture_end_date()
 
-        return employeeID, firstName, lastName, fullName, address, ssn, dateOfBirth, jobTitle, startDate, endDate
+        return (
+            employeeID,
+            firstName,
+            lastName,
+            fullName,
+            address,
+            ssn,
+            dateOfBirth,
+            jobTitle,
+            startDate,
+            endDate,
+        )
 
     @staticmethod
     def capture_first_name():
@@ -317,9 +363,11 @@ class IO:
         """
         while True:
             try:
-                strText = str(input('Enter First Name: ')).strip()
+                strText = str(input("Enter First Name: ")).strip()
                 if strText.isnumeric():
-                    raise ValueError("First Name is Numeric. Enter a valid First Name: ")
+                    raise ValueError(
+                        "First Name is Numeric. Enter a valid First Name: "
+                    )
                 elif strText == "":
                     raise ValueError("First Name is empty. Enter a valid First Name: ")
             except ValueError as e:
@@ -337,7 +385,7 @@ class IO:
         """
         while True:
             try:
-                strText = str(input('Enter Last Name: ')).strip()
+                strText = str(input("Enter Last Name: ")).strip()
                 if strText.isnumeric():
                     raise ValueError("Last Name is Numeric. Enter a valid Last name: ")
                 elif strText == "":
@@ -357,7 +405,7 @@ class IO:
         """
         while True:
             try:
-                strText = str(input('Enter Address: ')).strip()
+                strText = str(input("Enter Address: ")).strip()
                 if strText.isnumeric():
                     raise ValueError("Address is Numeric. Enter a valid address: ")
                 elif strText == "":
@@ -377,7 +425,7 @@ class IO:
         """
         while True:
             try:
-                strText = str(input('Enter ssn: ')).strip()
+                strText = str(input("Enter ssn: ")).strip()
                 if strText.isalpha():
                     raise ValueError("ssn is alpha. Enter a valid ssn: ")
                 elif strText == "":
@@ -397,11 +445,15 @@ class IO:
         """
         while True:
             try:
-                strText = str(input('Enter Date of Birth: ')).strip()
+                strText = str(input("Enter Date of Birth: ")).strip()
                 if strText.isalpha():
-                    raise ValueError("Date of Birth is alpha. Enter a valid date of birth: ")
+                    raise ValueError(
+                        "Date of Birth is alpha. Enter a valid date of birth: "
+                    )
                 elif strText == "":
-                    raise ValueError("Date of Birth is empty. Enter a valid date of birth: ")
+                    raise ValueError(
+                        "Date of Birth is empty. Enter a valid date of birth: "
+                    )
             except ValueError as e:
                 print(e)
             else:
@@ -417,10 +469,10 @@ class IO:
         """
         while True:
             try:
-                strText = str(input('Enter Job Title: ')).strip()
+                strText = str(input("Enter Job Title: ")).strip()
                 if strText.isnumeric():
                     raise ValueError("Job Title is Numeric. Enter a valid Job Title: ")
-                elif strText== "":
+                elif strText == "":
                     raise ValueError("Job Title is empty. Enter a valid Job Title: ")
             except ValueError as e:
                 print(e)
@@ -437,7 +489,7 @@ class IO:
         """
         while True:
             try:
-                strText = str(input('Enter Start Date: ')).strip()
+                strText = str(input("Enter Start Date: ")).strip()
                 if strText.isalpha():
                     raise ValueError("Start Date is alpha. Enter a valid start date: ")
                 elif strText == "":
@@ -457,7 +509,7 @@ class IO:
         """
         while True:
             try:
-                strText = str(input('Enter End Date: ')).strip()
+                strText = str(input("Enter End Date: ")).strip()
                 if strText.isalpha():
                     raise ValueError("End date is alpha. Enter a valid end date: ")
                 elif strText == "":
@@ -469,13 +521,14 @@ class IO:
 
         return strText
 
+
 # Main Body of Script  ------------------------------------------------------ #
 
 if __name__ == "__main__":
 
     while True:
 
-    # reminder for annual review can be a separate class
+        # reminder for annual review can be a separate class
 
         print(result)
         print("Menu of Options")
