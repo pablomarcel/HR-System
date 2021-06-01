@@ -76,8 +76,10 @@ class UserSelection:
 
     def case_6(self):
         """User selected Delete record"""
+
         fullName = IO.input_name_to_delete()
         Processor.delete_record(IO.get_employee_db(), fullName)
+
         pass
 
     def case_7(self):
@@ -86,7 +88,6 @@ class UserSelection:
         print("Goodbye ")
 
         sys.exit()
-
 
 class Processor:
     """Performs Processing tasks"""
@@ -106,7 +107,8 @@ class Processor:
 
     @staticmethod
     def update_csv(dframe):
-        """Writes the filtered DataFrame to a csv file
+        """Writes the filtered DataFrame to a csv file.
+        This method is used when the user decides to delete record
         :param dframe: (Pandas DataFrame) DataFrame containing employee information
         :return: nothing
         """
@@ -115,7 +117,7 @@ class Processor:
 
     @staticmethod
     def generate_employee_id(dframe):
-        """Generates unique employee id
+        """Generates unique employee id for the next employee to be added
         :param dframe: (Pandas DataFrame) DataFrame containing employee information
         :return next_id: (Integer) Next ID to be used for an employee record
         """
@@ -128,10 +130,19 @@ class Processor:
     def append_row(
         df, id, first, last, full, address, ssn, dob, job, startDate, endDate
     ):
-        """Generates a row to be appended to a pandas DataFrame
+        """Generates a row of data to be appended to a pandas DataFrame
         :param dframe: (Pandas DataFrame) DataFrame containing employee information
         :param id: (Integer) Next ID to be used for an employee record
-        :return: nothing
+        :param first: (String) First Name to be used for an employee record
+        :param last: (String) Last Name to be used for an employee record
+        :param full: (String) Full Name to be used for an employee record
+        :param address: (String) Address to be used for an employee record
+        :param ssn: (String) Social Security Number to be used for an employee record
+        :param dob: (String) Date of Birth to be used for an employee record
+        :param job: (String) Job Title to be used for an employee record
+        :param startDate: (String) Start Date to be used for an employee record
+        :param endDate: (String) End Date to be used for an employee record
+        :return df: (Pandas DataFrame) a new Pandas DataFrame to be written to a csv
         """
 
         new_row = {
@@ -155,7 +166,8 @@ class Processor:
 
     @staticmethod
     def append_to_csv(df):
-        """Writes a new DataFarme to the csv file
+        """Writes a new DataFarme to the csv file.
+        This method is used when the user decides to add a new record to the csv
         :param df: (Pandas DataFrame) DataFrame containing employee information
         :return: nothing
         """
@@ -238,8 +250,8 @@ class IO:
 
     @staticmethod
     def print_all_employees(dframe):
-        """Shows the current Donors
-        :param donor_db: (Dictionary) dictionary of dictionaries containing all donors info
+        """Displays all employees
+        :param dframe: (Pandas DataFrame) a Pandas DataFrame containing all employee info.
         :return: nothing
         """
         print(tabulate(dframe, headers="keys", tablefmt="psql", showindex=False))
@@ -257,10 +269,13 @@ class IO:
 
     @staticmethod
     def print_all_employees_employed(dframe):
-        """Shows the current Donors
-        :param donor_db: (Dictionary) dictionary of dictionaries containing all donors info
+        """Displays the employees currently employed at the company
+        :param dframe: (Pandas DataFrame) DataFrame containing employee information
         :return: nothing
         """
+        # Filter out those employees who have left.
+        # That is, the ones that have a real 'EndDate'
+        # The employees currently employed have EndDate = None
 
         newdf = dframe[(dframe.EndDate == "None")]
 
@@ -272,6 +287,10 @@ class IO:
         :param dframe: (Pandas DataFrame) A DataFrame that contains employee information
         :return: nothing
         """
+
+        # Filter out those employees who have NOT left.
+        # That is, the ones that have EndDate = None
+        # The employees who have left have EndDate = xx/xx/xxxx
 
         df = dframe[(dframe.EndDate != "None")]
 
@@ -306,9 +325,9 @@ class IO:
 
     @staticmethod
     def input_name_to_delete():
-        """Pause program and show a message before continuing
-        :param optional_message:  An optional message you want to display
-        :return: nothing
+        """Captures the name of the employee to delete
+        :param:  None
+        :return strName: (String) String containing the full name of the person
         """
 
         while True:
@@ -327,9 +346,18 @@ class IO:
 
     @staticmethod
     def capture_employee_data(dframe):
-        """Pause program and show a message before continuing
-        :param optional_message:  An optional message you want to display
-        :return: nothing
+        """Captures employee data for new record
+        :param dframe: (Pandas DataFrame) a DataFrame with employee info
+        :return employeeID: (Integer) Unique Employee ID
+        :return firstName: (String) First Name
+        :return lastName: (String) Last Name
+        :return fullName: (String) Full Name
+        :return address: (String) Address
+        :return ssn: (String) Social Security Number
+        :return dateOfBirth: (String) Date of Birth
+        :return jobTitle: (String) Job Title
+        :return startDate: (String) Start Date
+        :return endDate: (String) End Date
         """
         employeeID = Processor.generate_employee_id(dframe)
         firstName = IO.capture_first_name()
@@ -357,9 +385,9 @@ class IO:
 
     @staticmethod
     def capture_first_name():
-        """Pause program and show a message before continuing
-        :param optional_message:  An optional message you want to display
-        :return: nothing
+        """Captures First Name
+        :param:  None
+        :return: Nothing
         """
         while True:
             try:
@@ -379,9 +407,9 @@ class IO:
 
     @staticmethod
     def capture_last_name():
-        """Pause program and show a message before continuing
-        :param optional_message:  An optional message you want to display
-        :return: nothing
+        """Captures Last Name
+        :param:  None
+        :return: Nothing
         """
         while True:
             try:
@@ -399,9 +427,9 @@ class IO:
 
     @staticmethod
     def capture_address():
-        """Pause program and show a message before continuing
-        :param optional_message:  An optional message you want to display
-        :return: nothing
+        """Captures Address
+        :param:  None
+        :return: Nothing
         """
         while True:
             try:
@@ -419,9 +447,9 @@ class IO:
 
     @staticmethod
     def capture_ssn():
-        """Pause program and show a message before continuing
-        :param optional_message:  An optional message you want to display
-        :return: nothing
+        """Captures Social Security Number
+        :param:  None
+        :return: Nothing
         """
         while True:
             try:
@@ -439,9 +467,9 @@ class IO:
 
     @staticmethod
     def capture_date_of_birth():
-        """Pause program and show a message before continuing
-        :param optional_message:  An optional message you want to display
-        :return: nothing
+        """Captures Date of Birth
+        :param:  None
+        :return: Nothing
         """
         while True:
             try:
@@ -464,8 +492,8 @@ class IO:
     @staticmethod
     def capture_job_title():
         """Captures Job Title
-        :param optional_message:  An optional message you want to display
-        :return strText: (String) A string containing the Job Title
+        :param:  None
+        :return: Nothing
         """
         while True:
             try:
@@ -483,9 +511,9 @@ class IO:
 
     @staticmethod
     def capture_start_date():
-        """Pause program and show a message before continuing
-        :param optional_message:  An optional message you want to display
-        :return: nothing
+        """Captures Start Date
+        :param:  None
+        :return: Nothing
         """
         while True:
             try:
@@ -503,9 +531,9 @@ class IO:
 
     @staticmethod
     def capture_end_date():
-        """Pause program and show a message before continuing
-        :param optional_message:  An optional message you want to display
-        :return: nothing
+        """Captures End Date
+        :param:  None
+        :return: Nothing
         """
         while True:
             try:
