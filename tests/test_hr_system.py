@@ -6,15 +6,15 @@ from pandas._testing import assert_frame_equal
 # next employee id testing
 
 
-def test_next_id():
+def test_generate_employee_id():
     df = pd.read_csv("src\hr_system\EmployeeData.csv")
     assert hr_system.hr_system.Processor.generate_employee_id(df) == 10000009
 
 
-# pandas data frame testing
+# testing pandas data frame in the case of a record addition
 
 
-def test_pandas_dfs():
+def test_append_row():
     id = 10000009
     first = "Mark"
     last = "Z"
@@ -146,3 +146,118 @@ def test_pandas_dfs():
     )
 
     assert_frame_equal(dframe, data_frame)
+
+
+# testing the pandas data frame against the csv file
+
+def test_get_employee_db():
+
+    df = pd.read_csv("src\hr_system\EmployeeData.csv")
+
+    data_frame = pd.DataFrame(
+        {
+            "EmployeeID": [
+                10000001,
+                10000002,
+                10000003,
+                10000004,
+                10000005,
+                10000006,
+                10000007,
+                10000008,
+            ],
+            "FirstName": [
+                "Pablo",
+                "Beavis",
+                "BHead",
+                "Beatrix",
+                "Butters",
+                "Jeff",
+                "Bill",
+                "Bill",
+            ],
+            "LastName": [
+                "Marcel",
+                "Judge",
+                "Judge",
+                "T",
+                "S",
+                "Bezos",
+                "T",
+                "Gates",
+            ],
+            "FullName": [
+                "Pablo Marcel",
+                "Beavis Judge",
+                "BHead Judge",
+                "Beatrix T",
+                "Butters S",
+                "Jeff Bezos",
+                "Bill T",
+                "Bill Gates",
+            ],
+            "Address": [
+                "Bothell",
+                "Vegas",
+                "Vegas",
+                "L.A.",
+                "Denver",
+                "Seattle",
+                "L.A.",
+                "L.A.",
+            ],
+            "ssn": [
+                "444-44-4444",
+                "666-66-6666",
+                "666-66-6667",
+                "111-11-1111",
+                "111-11-1112",
+                "000-00-0000",
+                "111-11-1113",
+                "111-11-1114",
+            ],
+            "DateOfBirth": [
+                "01/01/1901",
+                "01/01/1980",
+                "01/01/1980",
+                "01/01/1970",
+                "01/01/1970",
+                "01/01/1900",
+                "01/01/1970",
+                "01/01/1970",
+            ],
+            "JobTitle": [
+                "Rock Star",
+                "General",
+                "Judge",
+                "Assasin",
+                "Professor",
+                "Boss",
+                "Assasin",
+                "Rich Man",
+            ],
+            "StartDate": [
+                "07/31/2020",
+                "01/01/1995",
+                "01/01/1995",
+                "07/31/2020",
+                "01/01/2000",
+                "01/01/1950",
+                "07/31/2020",
+                "12/01/2020",
+            ],
+            "EndDate": [
+                "None",
+                "05/15/2021",
+                "05/15/2021",
+                "None",
+                "01/01/2000",
+                "01/01/2021",
+                "None",
+                "None",
+            ],
+        }
+    )
+
+    assert_frame_equal(df, data_frame)
+
