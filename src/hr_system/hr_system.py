@@ -42,6 +42,32 @@ class UserSelection:
     def case_5(self):
         """User selected Capture employee information"""
 
+        employeeID, \
+        firstName, \
+        lastName, \
+        fullName, \
+        address,\
+        ssn,\
+        dateOfBirth,\
+        jobTitle,\
+        startDate,\
+        endDate,\
+        = IO.capture_employee_data(IO.get_employee_db())
+
+        Processor.append_row(
+            IO.get_employee_db(),
+            employeeID, \
+            firstName, \
+            lastName, \
+            fullName, \
+            address, \
+            ssn, \
+            dateOfBirth, \
+            jobTitle, \
+            startDate, \
+            endDate, \
+            )
+
         pass
 
     def case_6(self):
@@ -81,6 +107,25 @@ class Processor:
         """
 
         dframe.to_csv('EmployeeData.csv', index=False)
+
+    @staticmethod
+    def generate_employee_id(dframe):
+        """Generates unique employee id
+        :param dframe: (Pandas DataFrame) DataFrame containing employee information
+        :return next_id: (Integer) Next ID to be used for an employee record
+        """
+        max_id = dframe['EmployeeID'].max()
+        next_id = max_id + 1
+
+        return next_id
+
+    @staticmethod
+    def append_row(dframe, id, first, last, full, address, ssn, dob, job, startDate, endDate):
+        """Generates unique employee id
+        :param dframe: (Pandas DataFrame) DataFrame containing employee information
+        :return next_id: (Integer) Next ID to be used for an employee record
+        """
+        print(id, first, last, full, address, ssn, dob, job, startDate, endDate)
 
 class IO:
     """Performs Input and Output tasks"""
@@ -244,6 +289,185 @@ class IO:
                 break
 
         return strName
+
+    @staticmethod
+    def capture_employee_data(dframe):
+        """Pause program and show a message before continuing
+        :param optional_message:  An optional message you want to display
+        :return: nothing
+        """
+        employeeID = Processor.generate_employee_id(dframe)
+        firstName = IO.capture_first_name()
+        lastName = IO.capture_last_name()
+        fullName = firstName + ' ' + lastName
+        address = IO.capture_address()
+        ssn = IO.capture_ssn()
+        dateOfBirth = IO.capture_date_of_birth()
+        jobTitle = IO.capture_job_title()
+        startDate = IO.capture_start_date()
+        endDate = IO.capture_end_date()
+
+        return employeeID, firstName, lastName, fullName, address, ssn, dateOfBirth, jobTitle, startDate, endDate
+
+    @staticmethod
+    def capture_first_name():
+        """Pause program and show a message before continuing
+        :param optional_message:  An optional message you want to display
+        :return: nothing
+        """
+        while True:
+            try:
+                strText = str(input('Enter First Name: ')).strip()
+                if strText.isnumeric():
+                    raise ValueError("First Name is Numeric. Enter a valid First Name: ")
+                elif strText == "":
+                    raise ValueError("First Name is empty. Enter a valid First Name: ")
+            except ValueError as e:
+                print(e)
+            else:
+                break
+
+        return strText
+
+    @staticmethod
+    def capture_last_name():
+        """Pause program and show a message before continuing
+        :param optional_message:  An optional message you want to display
+        :return: nothing
+        """
+        while True:
+            try:
+                strText = str(input('Enter Last Name: ')).strip()
+                if strText.isnumeric():
+                    raise ValueError("Last Name is Numeric. Enter a valid Last name: ")
+                elif strText == "":
+                    raise ValueError("Last Name is empty. Enter a valid Last Name: ")
+            except ValueError as e:
+                print(e)
+            else:
+                break
+
+        return strText
+
+    @staticmethod
+    def capture_address():
+        """Pause program and show a message before continuing
+        :param optional_message:  An optional message you want to display
+        :return: nothing
+        """
+        while True:
+            try:
+                strText = str(input('Enter Address: ')).strip()
+                if strText.isnumeric():
+                    raise ValueError("Address is Numeric. Enter a valid address: ")
+                elif strText == "":
+                    raise ValueError("Address is empty. Enter a valid address: ")
+            except ValueError as e:
+                print(e)
+            else:
+                break
+
+        return strText
+
+    @staticmethod
+    def capture_ssn():
+        """Pause program and show a message before continuing
+        :param optional_message:  An optional message you want to display
+        :return: nothing
+        """
+        while True:
+            try:
+                strText = str(input('Enter ssn: ')).strip()
+                if strText.isalpha():
+                    raise ValueError("ssn is alpha. Enter a valid ssn: ")
+                elif strText == "":
+                    raise ValueError("ssn is empty. Enter a valid ssn: ")
+            except ValueError as e:
+                print(e)
+            else:
+                break
+
+        return strText
+
+    @staticmethod
+    def capture_date_of_birth():
+        """Pause program and show a message before continuing
+        :param optional_message:  An optional message you want to display
+        :return: nothing
+        """
+        while True:
+            try:
+                strText = str(input('Enter Date of Birth: ')).strip()
+                if strText.isalpha():
+                    raise ValueError("Date of Birth is alpha. Enter a valid date of birth: ")
+                elif strText == "":
+                    raise ValueError("Date of Birth is empty. Enter a valid date of birth: ")
+            except ValueError as e:
+                print(e)
+            else:
+                break
+
+        return strText
+
+    @staticmethod
+    def capture_job_title():
+        """Captures Job Title
+        :param optional_message:  An optional message you want to display
+        :return strText: (String) A string containing the Job Title
+        """
+        while True:
+            try:
+                strText = str(input('Enter Job Title: ')).strip()
+                if strText.isnumeric():
+                    raise ValueError("Job Title is Numeric. Enter a valid Job Title: ")
+                elif strText== "":
+                    raise ValueError("Job Title is empty. Enter a valid Job Title: ")
+            except ValueError as e:
+                print(e)
+            else:
+                break
+
+        return strText
+
+    @staticmethod
+    def capture_start_date():
+        """Pause program and show a message before continuing
+        :param optional_message:  An optional message you want to display
+        :return: nothing
+        """
+        while True:
+            try:
+                strText = str(input('Enter Start Date: ')).strip()
+                if strText.isalpha():
+                    raise ValueError("Start Date is alpha. Enter a valid start date: ")
+                elif strText == "":
+                    raise ValueError("Start Date is empty. Enter a valid start date: ")
+            except ValueError as e:
+                print(e)
+            else:
+                break
+
+        return strText
+
+    @staticmethod
+    def capture_end_date():
+        """Pause program and show a message before continuing
+        :param optional_message:  An optional message you want to display
+        :return: nothing
+        """
+        while True:
+            try:
+                strText = str(input('Enter End Date: ')).strip()
+                if strText.isalpha():
+                    raise ValueError("End date is alpha. Enter a valid end date: ")
+                elif strText == "":
+                    raise ValueError("End date is empty. Enter a valid end date: ")
+            except ValueError as e:
+                print(e)
+            else:
+                break
+
+        return strText
 
 # Main Body of Script  ------------------------------------------------------ #
 
