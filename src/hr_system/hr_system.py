@@ -255,7 +255,15 @@ class IO:
         :param dframe: (Pandas DataFrame) a Pandas DataFrame containing all employee info.
         :return: nothing
         """
-        print(tabulate(dframe, headers="keys", tablefmt="psql", showindex=False))
+        IO.print_header()
+        print('List of all employees: ')
+        IO.print_footer()
+
+        df=dframe.copy()
+
+        df["StartDate"] = pd.to_datetime(df["StartDate"])
+
+        print(tabulate(df, headers="keys", tablefmt="psql", showindex=False))
 
     @staticmethod
     def get_employee_db():
@@ -279,8 +287,13 @@ class IO:
         # The employees currently employed have EndDate = None
 
         newdf = dframe[(dframe.EndDate == "None")]
+        df=newdf.copy()
+        df["StartDate"] = pd.to_datetime(df["StartDate"])
 
-        print(tabulate(newdf, headers="keys", tablefmt="psql", showindex=False))
+        IO.print_header()
+        print('List of all employees currently employed: ')
+        IO.print_footer()
+        print(tabulate(df, headers="keys", tablefmt="psql", showindex=False))
 
     @staticmethod
     def print_employees_departures(dframe):
@@ -303,6 +316,9 @@ class IO:
 
         df_filter = newdf[newdf.EndDate > date - pd.to_timedelta("30day")]
 
+        IO.print_header()
+        print('List of all employees who have left the company in the past 30 days: ')
+        IO.print_footer()
         print(tabulate(df_filter, headers="keys", tablefmt="psql", showindex=False))
 
     @staticmethod
@@ -320,7 +336,13 @@ class IO:
 
         date = datetime.datetime.today().replace(microsecond=0)
 
-        df_filter = newdf[newdf.StartDate > date - pd.to_timedelta("365day")]
+        df_filter = newdf[newdf.StartDate + pd.to_timedelta("365day") - pd.to_timedelta("90day") < date]
+
+        IO.print_header()
+
+        print('FRIENDLY REMINDER! Anual Reviews are coming up for the following employees: ')
+
+        IO.print_footer()
 
         print(tabulate(df_filter, headers="keys", tablefmt="psql", showindex=False))
 
@@ -538,7 +560,7 @@ class IO:
         """
         while True:
             try:
-                strText = str(input("Enter End Date: ")).strip()
+                strText = str(input("Enter End Date, Enter None if employed: ")).strip()
                 if strText.isalpha():
                     raise ValueError("End date is alpha. Enter a valid end date: ")
                 elif strText == "":
@@ -550,6 +572,35 @@ class IO:
 
         return strText
 
+    @staticmethod
+    def activate_reminders(dframe):
+        """Activate the reminders
+        :param:  None
+        :return: Nothing
+        """
+
+        IO.print_review_reminders(dframe)
+
+    @staticmethod
+    def print_header():
+        """Prints the header of the report
+        :param: None
+        :return: nothing
+        """
+        print('+--------------+-------------+------------+--------------'
+              '+-----------+-------------+---------------+------------'
+              '+---------------------+-----------+')
+
+    @staticmethod
+    def print_footer():
+        """Prints the footer of the report
+        :param: None
+        :return: nothing
+        """
+
+        print('+--------------+-------------+------------+--------------'
+              '+-----------+-------------+---------------+------------'
+              '+---------------------+-----------+')
 
 # Main Body of Script  ------------------------------------------------------ #
 
@@ -568,6 +619,8 @@ if __name__ == "__main__":
         print(IO.get_menu(5))
         print(IO.get_menu(6))
         print(IO.get_menu(7))
+
+        IO.activate_reminders(IO.get_employee_db())
 
         # menu printed
 
