@@ -1,6 +1,7 @@
 import hr_system.hr_system
 import pandas as pd
 from pandas._testing import assert_frame_equal
+import re
 
 # next employee id testing
 
@@ -255,4 +256,15 @@ def test_get_employee_db():
     )
 
     assert_frame_equal(df, data_frame)
+
+def test_isValidSSN():
+    ssn_trial_1 = '000-00-0000'
+    assert hr_system.hr_system.Processor.isValidSSN(ssn_trial_1) == False
+    ssn_trial_2 = '608-07-5467'
+    assert hr_system.hr_system.Processor.isValidSSN(ssn_trial_2) == True
+    ssn_trial_3 = '900-00-0000'
+    assert hr_system.hr_system.Processor.isValidSSN(ssn_trial_3) == False
+    ssn_trial_4 = '600-00-0000'
+    assert hr_system.hr_system.Processor.isValidSSN(ssn_trial_4) == False
+
 
