@@ -5,6 +5,7 @@ import numpy as np
 from tabulate import tabulate
 import dateutil
 import datetime
+import re
 
 result = pyfiglet.figlet_format("h r  s y s t e m", font="slant")
 strStatus = ""
@@ -176,6 +177,32 @@ class Processor:
         """
 
         df.to_csv("EmployeeData.csv", index=False)
+
+    @staticmethod
+    def isValidSSN(str):
+        """Validates the social security format
+        :param str: (String) string that represents the social security number
+        :return: (Boolean)
+        """
+        # This code is contributed by avanitrachhadiya2155
+        # Regex to check valid
+        # SSN (Social Security Number).
+        regex = "^(?!666|000|9\\d{2})\\d{3}-(?!00)\\d{2}-(?!0{4})\\d{4}$"
+
+        # Compile the ReGex
+        p = re.compile(regex)
+
+        # If the string is empty
+        # return false
+        if (str == None):
+            return False
+
+        # Return if the string
+        # matched the ReGex
+        if (re.search(p, str)):
+            return True
+        else:
+            return False
 
 
 class IO:
@@ -484,8 +511,8 @@ class IO:
         while True:
             try:
                 strText = str(input("Enter ssn (000-00-0000): ")).strip()
-                if strText.isalpha():
-                    raise ValueError("ssn is alpha. Enter a valid ssn: ")
+                if Processor.isValidSSN(strText) == False:
+                    raise ValueError("ssn is not in the proper format. Enter a valid ssn: ")
                 elif strText == "":
                     raise ValueError("ssn is empty. Enter a valid ssn: ")
             except ValueError as e:
