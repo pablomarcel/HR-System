@@ -194,12 +194,12 @@ class Processor:
 
         # If the string is empty
         # return false
-        if (str == None):
+        if str == None:
             return False
 
         # Return if the string
         # matched the ReGex
-        if (re.search(p, str)):
+        if re.search(p, str):
             return True
         else:
             return False
@@ -361,24 +361,30 @@ class IO:
 
         newdf = df.copy()
 
-        newdf["StartDate"] = pd.to_datetime(newdf["StartDate"])
-
         date = datetime.datetime.today().replace(microsecond=0)
 
-        df_filter = newdf[
-            newdf.StartDate + pd.to_timedelta("365day") - pd.to_timedelta("90day")
-            < date
-        ]
+        newdf["StartDate"] = pd.to_datetime(newdf["StartDate"])
+
+        newdf['Month'] = pd.DatetimeIndex(newdf['StartDate']).month
+
+        newdf['Day'] = pd.DatetimeIndex(newdf['StartDate']).day
+
+        newdf['CalendarYear'] = date.year
+
+        newdf['DateForReview'] = pd.to_datetime((newdf.CalendarYear * 10000 + newdf.Month * 100 + newdf.Day).apply(str),
+                                                format='%Y%m%d')
+
+        df_filter = newdf[(newdf.DateForReview - pd.to_timedelta("90days") < date) & (newdf.DateForReview >= date)]
+
+        df_df = df_filter.drop(['Month', 'Day', 'CalendarYear'], axis=1)
 
         IO.print_header()
 
-        print(
-            "FRIENDLY REMINDER! Anual Reviews are coming up for the following employees: "
-        )
+        print('FRIENDLY REMINDER! Anual Reviews are coming up for the following employees: ')
 
         IO.print_footer()
 
-        print(tabulate(df_filter, headers="keys", tablefmt="psql", showindex=False))
+        print(tabulate(df_df, headers="keys", tablefmt="psql", showindex=False))
 
     @staticmethod
     def input_name_to_delete():
@@ -512,7 +518,9 @@ class IO:
             try:
                 strText = str(input("Enter ssn (000-00-0000): ")).strip()
                 if Processor.isValidSSN(strText) == False:
-                    raise ValueError("ssn is not in the proper format. Enter a valid ssn: ")
+                    raise ValueError(
+                        "ssn is not in the proper format. Enter a valid ssn: "
+                    )
                 elif strText == "":
                     raise ValueError("ssn is empty. Enter a valid ssn: ")
             except ValueError as e:
