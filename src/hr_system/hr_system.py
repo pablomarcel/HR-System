@@ -258,10 +258,10 @@ class IO:
         :return: nothing
         """
         IO.print_header()
-        print('List of all employees: ')
+        print("List of all employees: ")
         IO.print_footer()
 
-        df=dframe.copy()
+        df = dframe.copy()
 
         df["StartDate"] = pd.to_datetime(df["StartDate"])
 
@@ -288,12 +288,12 @@ class IO:
         # That is, the ones that have a real 'EndDate'
         # The employees currently employed have EndDate = None
 
-        newdf = dframe[(dframe.EndDate == "None")]
-        df=newdf.copy()
+        newdf = dframe[(dframe.EndDate == "NONE")]
+        df = newdf.copy()
         df["StartDate"] = pd.to_datetime(df["StartDate"])
 
         IO.print_header()
-        print('List of all employees currently employed: ')
+        print("List of all employees currently employed: ")
         IO.print_footer()
         print(tabulate(df, headers="keys", tablefmt="psql", showindex=False))
 
@@ -308,7 +308,7 @@ class IO:
         # That is, the ones that have EndDate = None
         # The employees who have left have EndDate = xx/xx/xxxx
 
-        df = dframe[(dframe.EndDate != "None")]
+        df = dframe[(dframe.EndDate != "NONE")]
 
         newdf = df.copy()
 
@@ -319,7 +319,7 @@ class IO:
         df_filter = newdf[newdf.EndDate > date - pd.to_timedelta("30day")]
 
         IO.print_header()
-        print('List of all employees who have left the company in the past 30 days: ')
+        print("List of all employees who have left the company in the past 30 days: ")
         IO.print_footer()
         print(tabulate(df_filter, headers="keys", tablefmt="psql", showindex=False))
 
@@ -330,7 +330,7 @@ class IO:
         :return: nothing
         """
 
-        df = dframe[(dframe.EndDate == "None")]
+        df = dframe[(dframe.EndDate == "NONE")]
 
         newdf = df.copy()
 
@@ -338,11 +338,16 @@ class IO:
 
         date = datetime.datetime.today().replace(microsecond=0)
 
-        df_filter = newdf[newdf.StartDate + pd.to_timedelta("365day") - pd.to_timedelta("90day") < date]
+        df_filter = newdf[
+            newdf.StartDate + pd.to_timedelta("365day") - pd.to_timedelta("90day")
+            < date
+        ]
 
         IO.print_header()
 
-        print('FRIENDLY REMINDER! Anual Reviews are coming up for the following employees: ')
+        print(
+            "FRIENDLY REMINDER! Anual Reviews are coming up for the following employees: "
+        )
 
         IO.print_footer()
 
@@ -496,19 +501,17 @@ class IO:
         :param:  None
         :return: Nothing
         """
+        formt = "%m/%d/%Y"
         while True:
             try:
-                strText = str(input("Enter Date of Birth (MM/DD/YYYY): ")).strip()
-                if strText.isalpha():
-                    raise ValueError(
-                        "Date of Birth is alpha. Enter a valid date of birth: "
-                    )
-                elif strText == "":
-                    raise ValueError(
-                        "Date of Birth is empty. Enter a valid date of birth: "
-                    )
+                strText = str(
+                    input("Enter Date of Birth, MM/DD/YYYY (%m/%d/%Y): ")
+                ).strip()
+                res = bool(datetime.datetime.strptime(strText, formt))
+
             except ValueError as e:
                 print(e)
+
             else:
                 break
 
@@ -540,15 +543,17 @@ class IO:
         :param:  None
         :return: Nothing
         """
+        formt = "%m/%d/%Y"
         while True:
             try:
-                strText = str(input("Enter Start Date (MM/DD/YYYY): ")).strip()
-                if strText.isalpha():
-                    raise ValueError("Start Date is alpha. Enter a valid start date: ")
-                elif strText == "":
-                    raise ValueError("Start Date is empty. Enter a valid start date: ")
+                strText = str(
+                    input("Enter Start Date, MM/DD/YYYY (%m/%d/%Y): ")
+                ).strip()
+                res = bool(datetime.datetime.strptime(strText, formt))
+
             except ValueError as e:
                 print(e)
+
             else:
                 break
 
@@ -560,15 +565,24 @@ class IO:
         :param:  None
         :return: Nothing
         """
+        formt = "%m/%d/%Y"
+
         while True:
-            try:
-                strText = str(input("Enter End Date (MM/DD/YYYY), Enter None if employed: ")).strip()
-                if strText.isalpha():
-                    raise ValueError("End date is alpha. Enter a valid end date: ")
-                elif strText == "":
-                    raise ValueError("End date is empty. Enter a valid end date: ")
-            except ValueError as e:
-                print(e)
+
+            strText = (
+                str(input("Enter End Date, MM/DD/YYYY (%m/%d/%Y): ")).strip().upper()
+            )
+
+            if strText != "NONE":
+                try:
+
+                    res = bool(datetime.datetime.strptime(strText, formt))
+
+                except ValueError as e:
+                    print(e)
+
+                else:
+                    break
             else:
                 break
 
@@ -589,9 +603,11 @@ class IO:
         :param: None
         :return: nothing
         """
-        print('+--------------+-------------+------------+--------------'
-              '+-----------+-------------+---------------+------------'
-              '+---------------------+-----------+')
+        print(
+            "+--------------+-------------+------------+--------------"
+            "+-----------+-------------+---------------+------------"
+            "+---------------------+-----------+"
+        )
 
     @staticmethod
     def print_footer():
@@ -600,9 +616,12 @@ class IO:
         :return: nothing
         """
 
-        print('+--------------+-------------+------------+--------------'
-              '+-----------+-------------+---------------+------------'
-              '+---------------------+-----------+')
+        print(
+            "+--------------+-------------+------------+--------------"
+            "+-----------+-------------+---------------+------------"
+            "+---------------------+-----------+"
+        )
+
 
 # Main Body of Script  ------------------------------------------------------ #
 

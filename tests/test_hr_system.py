@@ -20,7 +20,7 @@ def test_append_row():
     dob = "01/01/1970"
     job = "Rich Man"
     startDate = "12/01/2020"
-    endDate = "None"
+    endDate = "NONE"
     df = pd.read_csv("src\hr_system\EmployeeData.csv")
 
     dframe = hr_system.hr_system.Processor.append_row(
@@ -128,15 +128,15 @@ def test_append_row():
                 "12/01/2020",
             ],
             "EndDate": [
-                "None",
+                "NONE",
                 "05/15/2021",
                 "05/15/2021",
-                "None",
+                "NONE",
                 "01/01/2000",
                 "01/01/2021",
-                "None",
-                "None",
-                "None",
+                "NONE",
+                "NONE",
+                "NONE",
             ],
         }
     )
@@ -242,14 +242,14 @@ def test_get_employee_db():
                 "12/01/2020",
             ],
             "EndDate": [
-                "None",
+                "NONE",
                 "05/15/2021",
                 "05/15/2021",
-                "None",
+                "NONE",
                 "01/01/2000",
                 "01/01/2021",
-                "None",
-                "None",
+                "NONE",
+                "NONE",
             ],
         }
     )
