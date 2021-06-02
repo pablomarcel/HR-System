@@ -376,13 +376,13 @@ class IO:
 
         df_filter = newdf[(newdf.DateForReview - pd.to_timedelta("90days") < date) & (newdf.DateForReview >= date)]
 
-        df_df = df_filter.drop(['Month', 'Day', 'CalendarYear'], axis=1)
+        df_df = df_filter.drop(['Month', 'Day', 'CalendarYear', 'ssn'], axis=1)
 
-        IO.print_header()
-
+        #IO.print_header()
+        print()
         print('FRIENDLY REMINDER! Anual Reviews are coming up for the following employees: ')
 
-        IO.print_footer()
+        #IO.print_footer()
 
         print(tabulate(df_df, headers="keys", tablefmt="psql", showindex=False))
 
